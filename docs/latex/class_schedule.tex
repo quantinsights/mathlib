@@ -1,0 +1,42 @@
+\hypertarget{class_schedule}{}\doxysection{Schedule Class Reference}
+\label{class_schedule}\index{Schedule@{Schedule}}
+
+
+Schedules.  
+
+
+
+
+{\ttfamily \#include $<$Schedule.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_schedule_a0955f841014983081fa935149096fb0e}\label{class_schedule_a0955f841014983081fa935149096fb0e}} 
+\mbox{\hyperlink{class_schedule_a0955f841014983081fa935149096fb0e}{Schedule}} ()=default
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_schedule_ab19e5eed09da229f532f77634020ab89}\label{class_schedule_ab19e5eed09da229f532f77634020ab89}} 
+{\bfseries Schedule} (const date \&s, const date \&d, const \mbox{\hyperlink{class_frequency}{Frequency}} \&f, \mbox{\hyperlink{class_business_day_adjustment}{Business\+Day\+Adjustment}} \&b)
+\item 
+\mbox{\Hypertarget{class_schedule_ad9a65c4c4c27fabd9b40ed95d98aff5f}\label{class_schedule_ad9a65c4c4c27fabd9b40ed95d98aff5f}} 
+\mbox{\hyperlink{class_schedule_ad9a65c4c4c27fabd9b40ed95d98aff5f}{Schedule}} (const vector$<$ \mbox{\hyperlink{class_schedule_period}{Schedule\+Period}} $>$ \&periods, const \mbox{\hyperlink{class_frequency}{Frequency}} \&f)
+\begin{DoxyCompactList}\small\item\em Parametric constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_schedule_a4709012cedd68da7b73b7003f2628ee7}\label{class_schedule_a4709012cedd68da7b73b7003f2628ee7}} 
+{\bfseries Schedule} (\mbox{\hyperlink{class_schedule}{Schedule}} \&s)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Schedules. 
+
+A common problem in Finance is the derivation of a schedule of dates. The schedule is generally used to determine accrued interest and payments. Building a schedule is conceptually simple, however the devil is in the details. How should end-\/of-\/month be handled? What happens when a cashflow date falls on a holiday? What happens when trying to divide 22 months into 3 month units? The {\ttfamily \mbox{\hyperlink{class_schedule}{Schedule}}} class includes constructors that provide powerful mechanisms to create schedules. The {\ttfamily \mbox{\hyperlink{class_schedule}{Schedule}}} class contains the following mandatory attributes.
+\begin{DoxyItemize}
+\item {\ttfamily start\+Date}, the start of the first schedule period.
+\item {\ttfamily end\+Date}, the end of the last schedule period.
+\item {\ttfamily frequency}, regular periodic frequency to use.
+\item {\ttfamily business\+Day\+Adjustment}, the business day adjustment to apply I store a \mbox{\hyperlink{class_schedule}{Schedule}} as a vector of \mbox{\hyperlink{class_schedule}{Schedule}} Periods. The following optional items are also available to customize the schedule\+: -\/{\ttfamily start\+Date\+Business\+Day\+Adjustment}, overrides the business day adjustment to be used for the start date. -\/{\ttfamily end\+Date\+Business\+Day\+Adjustment}, overrides the business day adjustment to be used for the end date. -\/{\ttfamily stub\+Convention}, convention defining how to handle stubs. -\/{\ttfamily roll\+Convention}, convention defining how to roll dates. -\/{\ttfamily first\+Regular\+Start\+Date}, start date of the first regular schedule period, which is the end date of the initial stub -\/{\ttfamily last\+Regular\+Start\+Date}, end date of the last regular schedule period, which is the start date of the final stub 
+\end{DoxyItemize}
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Schedule.\+h\end{DoxyCompactItemize}

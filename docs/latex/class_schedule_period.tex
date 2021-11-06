@@ -1,0 +1,57 @@
+\hypertarget{class_schedule_period}{}\doxysection{Schedule\+Period Class Reference}
+\label{class_schedule_period}\index{SchedulePeriod@{SchedulePeriod}}
+
+
+A period in a schedule.  
+
+
+
+
+{\ttfamily \#include $<$Schedule\+Period.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_schedule_period_a9862b9f265d2ebc0e0df72f909f80928}\label{class_schedule_period_a9862b9f265d2ebc0e0df72f909f80928}} 
+{\bfseries Schedule\+Period} (date start\+Date, date end\+Date, date un\+Adjusted\+Start\+Date, date unadjusted\+End\+Date)
+\item 
+\mbox{\Hypertarget{class_schedule_period_aaa761e341eea5a5eb8044d176004be72}\label{class_schedule_period_aaa761e341eea5a5eb8044d176004be72}} 
+{\bfseries Schedule\+Period} (\mbox{\hyperlink{class_schedule_period}{Schedule\+Period}} \&s)
+\item 
+int \mbox{\hyperlink{class_schedule_period_accc17667e5c683f4c357d414ef444bdc}{length\+In\+Days}} ()
+\begin{DoxyCompactList}\small\item\em Calculates the number of days in the period. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A period in a schedule. 
+
+This consists of a single period (date range) within a schedule. This is typically used as the basis for financial calculations, such as accrual of interest.
+
+Two pairs of dates are provided, start/end and unadjusted\+Start/unadjusted\+End The period itself runs from start\+Date to end\+Date The unadjusted\+Start\+Date and unadjusted\+End\+Date are used to calculate the start\+Date and end\+Date when applying business day adjustment.
+
+For example, consider the schedule that has periods every three months on the 10th of the month. From time-\/to-\/time, the scheduled date will be a weekend or holiday. In this case, a rule may apply moving the date to a valid business day. If this happens, then the unadjusted date is the original date in the \mbox{\hyperlink{class_schedule_period}{Schedule\+Period}} and the adjusted date is the related valid business day. Note that\+: all schedules apply a business day adjustment. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_schedule_period_accc17667e5c683f4c357d414ef444bdc}\label{class_schedule_period_accc17667e5c683f4c357d414ef444bdc}} 
+\index{SchedulePeriod@{SchedulePeriod}!lengthInDays@{lengthInDays}}
+\index{lengthInDays@{lengthInDays}!SchedulePeriod@{SchedulePeriod}}
+\doxysubsubsection{\texorpdfstring{lengthInDays()}{lengthInDays()}}
+{\footnotesize\ttfamily int Schedule\+Period\+::length\+In\+Days (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Calculates the number of days in the period. 
+
+This returns the actual number of days in the period, considering the adjusted start and the adjusted end dates. This calculation does not involve a Day\+Count or a holiday calendar. It includes the start\+Date and excludes the end date. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{15 \{}
+\DoxyCodeLine{16     \textcolor{keywordflow}{return} (adjustedEndDate -\/ adjustedStartDate).days();}
+\DoxyCodeLine{17 \}}
+
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Schedule\+Period.\+h\item 
+Schedule\+Period.\+cpp\end{DoxyCompactItemize}
