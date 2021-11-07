@@ -13,6 +13,34 @@ HolidayCalendar::HolidayCalendar(HolidayCalendarId id) : holidayCalendarId{ id }
 	generateCalendar();
 }
 
+HolidayCalendar::HolidayCalendar(std::vector<date> h, gregorian_calendar::day_of_week_type f, gregorian_calendar::day_of_week_type s, HolidayCalendarId id) : holidays{ h }, firstWeekendDay{ f }, secondWeekendDay{ s }, holidayCalendarId{id}
+{
+}
+
+HolidayCalendar::HolidayCalendar(const HolidayCalendar& h) : HolidayCalendar{h.holidays, h.firstWeekendDay, h.secondWeekendDay, h.holidayCalendarId}
+{
+}
+
+vector<date> HolidayCalendar::getHolidays() const
+{
+	return holidays;
+}
+
+gregorian_calendar::day_of_week_type HolidayCalendar::getFirstWeekendDay() const
+{
+	return firstWeekendDay;
+}
+
+gregorian_calendar::day_of_week_type HolidayCalendar::getSecondWeekendDay() const
+{
+	return secondWeekendDay;
+}
+
+HolidayCalendarId HolidayCalendar::getHolidayCalendarId() const
+{
+	return holidayCalendarId;
+}
+
 void HolidayCalendar::generateCalendar()
 {
 	if (holidayCalendarId == HolidayCalendarId::GBLO)
@@ -233,6 +261,8 @@ date HolidayCalendar::adjust(const date& d, BusinessDayConventions c)
 
 	return d1;
 }
+
+
 
 date HolidayCalendar::easter(int year)
 {

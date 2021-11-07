@@ -6,6 +6,10 @@ SchedulePeriod::SchedulePeriod(date s, date e, date us, date ue) :adjustedStartD
 {
 }
 
+SchedulePeriod::SchedulePeriod(const SchedulePeriod& s):SchedulePeriod{s.adjustedStartDate, s.adjustedEndDate, s.unAdjustedStartDate, s.unAdjustedEndDate}
+{
+}
+
 /// Calculates the number of days in the period.
 /// 
 /// This returns the actual number of days in the period, considering the adjusted start and the adjusted 

@@ -35,9 +35,8 @@ public:
 	BusinessDayConventions(string f);					//Define a frequency object by passing a string representation of the periodic frequency
 	BusinessDayConventions(const BusinessDayConventions& b);	//Copy constructor
 
-	businessDayConventions getBusDayConvention();
+	businessDayConventions getBusDayConvention() const;
 	void setBusDayConvention(businessDayConventions f);
-
 private:
 	businessDayConventions busDayConv;
 };

@@ -16,7 +16,7 @@ BusinessDayConventions::BusinessDayConventions(string c)
 		busDayConv = businessDayConventions::MODIFIED_PRECEDING;
 }
 
-businessDayConventions BusinessDayConventions::getBusDayConvention()
+businessDayConventions BusinessDayConventions::getBusDayConvention() const
 {
 	return busDayConv;
 }

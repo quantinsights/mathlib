@@ -62,13 +62,14 @@ public:
 	// Constructors
 	HolidayCalendar();														// Default Constructor
 	HolidayCalendar(HolidayCalendarId id);									// Create a holiday calendar with a user-specified ID
+	HolidayCalendar(std::vector<date> h, gregorian_calendar::day_of_week_type f, gregorian_calendar::day_of_week_type s, HolidayCalendarId id);
 	HolidayCalendar(const HolidayCalendar& h);								// Copy Constructor
 
 	//Getters
-	vector<date>& getHolidays();
-	gregorian_calendar::day_of_week_type getFirstWeekendDay();
-	gregorian_calendar::day_of_week_type getSecondWeekendDay();
-	HolidayCalendarId getHolidayCalendarId();
+	vector<date> getHolidays() const;
+	gregorian_calendar::day_of_week_type getFirstWeekendDay() const;
+	gregorian_calendar::day_of_week_type getSecondWeekendDay() const;
+	HolidayCalendarId getHolidayCalendarId() const;
 
 	//Assignment Operator
 	HolidayCalendar& operator = (const HolidayCalendar& h);

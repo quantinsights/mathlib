@@ -22,7 +22,7 @@ public:
 	Frequency(string f);		//Define a frequency object by passing a string representation of the periodic frequency
 	Frequency(const Frequency& f);	//Copy constructor
 
-	frequency getPeriod();
+	frequency getPeriod() const;
 	void setPeriod(frequency f);
 
 private:
