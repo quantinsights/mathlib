@@ -9,7 +9,7 @@ using namespace std;
 class BusinessDayAdjustment
 {
 public:
-	BusinessDayAdjustment();
+	BusinessDayAdjustment() = default;
 	~BusinessDayAdjustment();
 
 private:

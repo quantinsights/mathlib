@@ -20,7 +20,7 @@ class Frequency
 public:
 	Frequency() = default;		//Default Constructor
 	Frequency(string f);		//Define a frequency object by passing a string representation of the periodic frequency
-	Frequency(Frequency& f);	//Copy constructor
+	Frequency(const Frequency& f);	//Copy constructor
 
 	frequency getPeriod();
 	void setPeriod(frequency f);

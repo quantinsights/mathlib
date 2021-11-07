@@ -30,7 +30,7 @@ public:
 	//Constructors
 	SchedulePeriod() = default;		//Default Constructor
 	SchedulePeriod(date startDate, date endDate, date unAdjustedStartDate, date unadjustedEndDate); //Parametrized constructor
-	SchedulePeriod(SchedulePeriod& s);	//Copy constructor
+	SchedulePeriod(const SchedulePeriod& s);	//Copy constructor
 
 	int lengthInDays();		
 

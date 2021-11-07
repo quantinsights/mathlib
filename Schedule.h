@@ -59,7 +59,7 @@ public:
 
 	///Parametric constructor
 	Schedule(const vector<SchedulePeriod>& periods, const Frequency& f);	
-	Schedule(Schedule& s);													
+	Schedule(const Schedule& s);													
 
 };
 

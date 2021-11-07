@@ -33,7 +33,7 @@ class BusinessDayConventions
 public:
 	BusinessDayConventions() = default;					//Default Constructor
 	BusinessDayConventions(string f);					//Define a frequency object by passing a string representation of the periodic frequency
-	BusinessDayConventions(BusinessDayConventions& b);	//Copy constructor
+	BusinessDayConventions(const BusinessDayConventions& b);	//Copy constructor
 
 	businessDayConventions getBusDayConvention();
 	void setBusDayConvention(businessDayConventions f);

@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/mathlib/v16/ipch/68858c603b594a38.ipch
+/.vs/mathlib/v16/Browse.VC.opendb
+/.vs/mathlib/v16/Browse.VC.db-wal
+/.vs/mathlib/v16/Browse.VC.db-shm
+/.vs/mathlib/v16/Browse.VC.db
+/.vs/mathlib/v16/TestStore/0
+/.vs/mathlib/v16/.suo
+/Debug/mathlib.tlog
+/Debug
+/docs/latex
