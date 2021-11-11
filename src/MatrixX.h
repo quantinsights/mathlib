@@ -52,6 +52,9 @@ public:
 template<typename scalarType>
 MatrixX<scalarType> operator*(const MatrixX<scalarType>& A, const MatrixX<scalarType>& B);
 
+template<typename scalarType>
+MatrixX<scalarType>& operator*(const scalarType k, MatrixX<scalarType>& m);
+
 /// <summary>
 /// Default constructor.
 /// No memory allocations are performed here.
@@ -367,14 +370,14 @@ std::ostream& operator<<(std::ostream& os, MatrixX<scalarType>& m)
 	return os;
 }
 
-template<typename scalarType, typename T>
-MatrixX<scalarType>& operator*(const T k, MatrixX<scalarType>& m)
+template<typename scalarType>
+MatrixX<scalarType>& operator*(const scalarType k, MatrixX<scalarType>& m)
 {
 	for (int i{}; i < m.rows(); ++i)
 	{
 		for (int j{}; j < m.cols(); ++j)
 		{
-			m(i, j) *= k;
+			m(i, j) = m(i,j) * k;
 		}
 	}
 
