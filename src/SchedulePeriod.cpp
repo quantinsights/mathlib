@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "SchedulePeriod.h"
 #include "Frequency.h"
 

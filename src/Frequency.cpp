@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Frequency.h"
 
 Frequency::Frequency(string f)
