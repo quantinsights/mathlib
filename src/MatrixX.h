@@ -47,13 +47,30 @@ public:
 	MatrixX& operator,(const scalarType x);
 	MatrixX& operator=(const MatrixX& right_hand_side);
 	bool operator==(const MatrixX& right_hand_side);
+	MatrixX& operator+=(const MatrixX& m);
+	MatrixX& operator-=(const MatrixX& m);
+
 };
 
+// Multiplication operator
 template<typename scalarType>
 MatrixX<scalarType> operator*(const MatrixX<scalarType>& A, const MatrixX<scalarType>& B);
 
 template<typename scalarType>
-MatrixX<scalarType>& operator*(const scalarType k, MatrixX<scalarType>& m);
+MatrixX<scalarType> operator*(const scalarType k, MatrixX<scalarType>& m);
+
+template<typename scalarType>
+MatrixX<scalarType>& operator*=(MatrixX<scalarType>& A, const MatrixX<scalarType>& B);
+
+template<typename scalarType>
+MatrixX<scalarType>& operator*=(const scalarType k, MatrixX<scalarType>& m);
+
+// Sub-matrices and sub-vectors
+template<class scalarType>
+MatrixX<scalarType> row(const MatrixX<scalarType>& m, int i);
+
+template<class scalarType>
+MatrixX<scalarType> col(const MatrixX<scalarType>& m, int j);
 
 /// <summary>
 /// Default constructor.
@@ -83,7 +100,7 @@ MatrixX<typename scalarType>::MatrixX<typename scalarType>(const MatrixX& m) : A
 /// <param name="m"></param>
 /// <param name="n"></param>
 template<typename scalarType>
-MatrixX<typename scalarType>::MatrixX(int m, int n) : _rows{ m }, _cols{ n }, _size{ m * n }, A(m* n)
+MatrixX<typename scalarType>::MatrixX(int m, int n) : _rows{ m }, _cols{ n }, _size{ m * n }, A(m * n)
 {
 	currentPosition = A.begin();
 }
@@ -370,22 +387,139 @@ std::ostream& operator<<(std::ostream& os, MatrixX<scalarType>& m)
 	return os;
 }
 
+/// <summary>
+/// Scalar multiplication of a matrix with a constant.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="k"></param>
+/// <param name="m"></param>
+/// <returns></returns>
 template<typename scalarType>
-MatrixX<scalarType>& operator*(const scalarType k, MatrixX<scalarType>& m)
+MatrixX<scalarType> operator*(const scalarType k, MatrixX<scalarType>& m)
 {
+	MatrixX<scalarType> result{ m };
 	for (int i{}; i < m.rows(); ++i)
 	{
 		for (int j{}; j < m.cols(); ++j)
 		{
-			m(i, j) = m(i,j) * k;
+			result(i, j) = m(i,j) * k;
 		}
 	}
 
-	return m;
+	return result;
 }
 
+/// <summary>
+/// Boolean comparision operator.
+/// Compares if \f$A = B\f$.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="right_hand_side"></param>
+/// <returns></returns>
 template<typename scalarType>
 bool MatrixX<scalarType>::operator==(const MatrixX& right_hand_side)
 {
 	return (this->A == right_hand_side.A);
+}
+
+/// <summary>
+/// Unary plus operator.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="right_hand_side"></param>
+/// <returns></returns>
+template<typename scalarType>
+MatrixX<scalarType>& operator+(MatrixX<scalarType>& right_hand_side)
+{
+	return right_hand_side;
+}
+
+/// <summary>
+/// Unary minus operator
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="right_hand_side"></param>
+/// <returns></returns>
+template<typename scalarType>
+MatrixX<scalarType> operator-(MatrixX<scalarType>& right_hand_side)
+{
+	return operator*<scalarType>(-1, right_hand_side);
+}
+
+/// <summary>
+/// Addition assignment operator
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="m"></param>
+/// <returns></returns>
+template<class scalarType>
+MatrixX<scalarType>& MatrixX<scalarType>::operator+=(const MatrixX<scalarType>& m)
+{
+	(*this) = (*this) + m;
+	return (*this);
+}
+
+/// <summary>
+/// Subtraction assignment operator
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="m"></param>
+/// <returns></returns>
+template<class scalarType>
+MatrixX<scalarType>& MatrixX<scalarType>::operator-=(const MatrixX<scalarType>& m)
+{
+	(*this) = (*this) - m;
+	return (*this);
+}
+
+/// <summary>
+/// Multiplication assignment operator
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="A"></param>
+/// <param name="B"></param>
+/// <returns></returns>
+template<typename scalarType>
+MatrixX<scalarType>& operator*=(MatrixX<scalarType>& A, const MatrixX<scalarType>& B)
+{
+	A = A * B;
+	return A;
+}
+
+/// <summary>
+/// Scalar multiplication assignment operator
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="k"></param>
+/// <param name="A"></param>
+/// <returns></returns>
+template<typename scalarType>
+MatrixX<scalarType>& operator*=(const scalarType k, MatrixX<scalarType>& A)
+{
+	A = k * A;
+	return A;
+}
+
+template<class scalarType>
+MatrixX<scalarType> row(const MatrixX<scalarType>& m, int i)
+{
+	MatrixX<scalarType> result{ 1, m.cols() };
+
+	for (int j{}; j < m.cols(); ++j)
+	{
+		result(0, j) = m(i, j);
+	}
+	return result;
+}
+
+template<class scalarType>
+MatrixX<scalarType> col(const MatrixX<scalarType>& m, int j)
+{
+	MatrixX<scalarType> result{ m.rows(), 1 };
+
+	for (int i{}; i < m.rows(); ++i)
+	{
+		result(i, 0) = m(i, j);
+	}
+	return result;
 }

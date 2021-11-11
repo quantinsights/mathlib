@@ -77,6 +77,9 @@ public:
 	Matrix& operator,(const scalarType x);
 	Matrix& operator=(const Matrix& right_hand_side);
 	bool operator==(const Matrix& right_hand_side);
+	Matrix& operator+=(const Matrix& m);
+	Matrix& operator-=(const Matrix& m);
+	
 	//Matrix& transpose();
 
 };
@@ -86,8 +89,16 @@ template<typename scalarType, int m, int n, int p, int q>
 Matrix<scalarType, m, q> operator*(const Matrix<scalarType, m, n>& A, const Matrix<scalarType, p, q>& B);
 
 
+template<typename scalarType, int m, int n>
+Matrix<scalarType, m, n>& operator*(const scalarType k, const Matrix<scalarType, m, n>& mat);
+
+// Non-member operator functions
+template<typename scalarType, int m, int n, int p, int q>
+Matrix<scalarType, m, q>& operator*=(Matrix<scalarType, m, n>& A, const Matrix<scalarType, p, q>& B);
+
+
 template<typename scalarType, int m, int n, typename T>
-Matrix<scalarType, m, n>& operator*(const T k, const Matrix<scalarType, m, n>& mat);
+Matrix<scalarType, m, n>& operator*=(const T k, Matrix<scalarType, m, n>& mat);
 
 /// <summary>
 /// The default constructor.
@@ -410,8 +421,15 @@ std::ostream& operator<<(std::ostream& os, Matrix<scalarType, rowsAtCompileTime,
 	return os;
 }
 
-template<typename scalarType, int m, int n, typename T>
-Matrix<scalarType, m, n>& operator*(const T k, Matrix<scalarType, m, n>& mat)
+/// <summary>
+/// Scalar multiplication of a matrix with a constant.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="k"></param>
+/// <param name="m"></param>
+/// <returns></returns>
+template<typename scalarType, int m, int n>
+Matrix<scalarType, m, n>& operator*(const scalarType k, Matrix<scalarType, m, n>& mat)
 {
 	for (int i{}; i < m.rows(); ++i)
 	{
@@ -424,13 +442,56 @@ Matrix<scalarType, m, n>& operator*(const T k, Matrix<scalarType, m, n>& mat)
 	return mat;
 }
 
+/// <summary>
+/// Boolean comparision operator.
+/// Compares if \f$A = B\f$.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="right_hand_side"></param>
+/// <returns></returns>
 template<typename scalarType, int rowsAtCompileTime, int colsAtCompileTime>
 inline bool Matrix<scalarType, rowsAtCompileTime, colsAtCompileTime>::operator==(const Matrix& right_hand_side)
 {
 	return (this->A == right_hand_side.A);
 }
 
+/// <summary>
+/// Unary plus operator.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="right_hand_side"></param>
+/// <returns></returns>
+template<typename scalarType, int rowsAtCompileTime, int colsAtCompileTime>
+Matrix<scalarType, rowsAtCompileTime, colsAtCompileTime>& operator+(const Matrix<scalarType, rowsAtCompileTime, colsAtCompileTime>& right_hand_side)
+{
+	return right_hand_side;
+}
 
+/// <summary>
+/// Unary minus operator
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="right_hand_side"></param>
+/// <returns></returns>
+template<typename scalarType, int rowsAtCompileTime, int colsAtCompileTime>
+Matrix<scalarType, rowsAtCompileTime, colsAtCompileTime>& operator-(const Matrix<scalarType, rowsAtCompileTime, colsAtCompileTime>& right_hand_side)
+{
+	return operator*<scalarType>(-1, right_hand_side);
+}
+
+template<typename scalarType, int m, int n, int p, int q>
+Matrix<scalarType, m, q>& operator*=(Matrix<scalarType, m, n>& A, const Matrix<scalarType, p, q>& B)
+{
+	A = A * B;
+	return A;
+}
+
+template<typename scalarType, int m, int n>
+Matrix<scalarType, m, n>& operator*=(const scalarType k, Matrix<scalarType, m, n>& mat)
+{
+	A = k * A;
+	return A;
+}
 
 template <int rowsAtCompileTime, int colsAtCompileTime>
 class Matrix<double, rowsAtCompileTime, colsAtCompileTime>;
