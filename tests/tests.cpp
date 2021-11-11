@@ -257,7 +257,7 @@ namespace tests
 				{0, 0, 1}
 			};
 
-			MatrixXd actual = row(m1, 1);
+			MatrixXd actual = m1.row(1);
 			MatrixXd expected{
 				{0, 1, 0}
 			};
@@ -272,11 +272,29 @@ namespace tests
 				{0, 0, 1}
 			};
 
-			MatrixXd actual = col(m1, 1);
+			MatrixXd actual = m1.col(1);
 			MatrixXd expected{
 				{0},
 				{1},
 				{0}
+			};
+			Assert::IsTrue(actual == expected);
+		}
+
+		TEST_METHOD(UnitTest12_transpose)
+		{
+			MatrixXd m1{
+				{1, 2, 3, 4},
+				{5, 6, 7, 8},
+				{9, 10, 11, 12}
+			};
+
+			MatrixXd actual = m1.transpose();
+			MatrixXd expected{
+				{1, 5, 9},
+				{2, 6, 10},
+				{3, 7, 11},
+				{4, 8, 12}
 			};
 			Assert::IsTrue(actual == expected);
 		}

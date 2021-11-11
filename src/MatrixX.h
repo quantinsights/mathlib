@@ -6,6 +6,7 @@
 #include <iterator>
 #include <iomanip>
 #include <initializer_list>
+#include <algorithm>
 
 template <typename T>
 class MatrixX;
@@ -50,9 +51,16 @@ public:
 	MatrixX& operator+=(const MatrixX& m);
 	MatrixX& operator-=(const MatrixX& m);
 
+	//Submatrices and sub-vectors
+	MatrixX<scalarType> row(int i) const;
+	MatrixX<scalarType> col(int j) const;
+
+	MatrixX<scalarType> transpose() const;
 };
 
-// Multiplication operator
+// ===========================================================================================
+//                                   Global Operators
+// -------------------------------------------------------------------------------------------
 template<typename scalarType>
 MatrixX<scalarType> operator*(const MatrixX<scalarType>& A, const MatrixX<scalarType>& B);
 
@@ -65,12 +73,7 @@ MatrixX<scalarType>& operator*=(MatrixX<scalarType>& A, const MatrixX<scalarType
 template<typename scalarType>
 MatrixX<scalarType>& operator*=(const scalarType k, MatrixX<scalarType>& m);
 
-// Sub-matrices and sub-vectors
-template<class scalarType>
-MatrixX<scalarType> row(const MatrixX<scalarType>& m, int i);
-
-template<class scalarType>
-MatrixX<scalarType> col(const MatrixX<scalarType>& m, int j);
+// ===========================================================================================
 
 /// <summary>
 /// Default constructor.
@@ -177,10 +180,8 @@ std::vector<scalarType> MatrixX<scalarType>::getRawData() const
 template<typename scalarType>
 scalarType MatrixX<typename scalarType>::operator()(const int i, const int j) const
 {
-	typename std::vector<scalarType>::const_iterator it{ A.begin() };
-	it = it + (i * _cols) + j;
-	if (it < A.end())
-		return *it;
+	if (i * cols() + j < A.size())
+		return A[i * cols() + j];
 	else
 		throw std::out_of_range("\nError accessing an element beyond matrix bounds");
 }
@@ -197,10 +198,8 @@ scalarType MatrixX<typename scalarType>::operator()(const int i, const int j) co
 template<typename scalarType>
 scalarType& MatrixX<typename scalarType>::operator()(const int i, const int j)
 {
-	typename std::vector<scalarType>::iterator it{ A.begin() };
-	it = it + (i * _cols) + j;
-	if (it < A.end())
-		return *it;
+	if (i * cols() + j < A.size())
+		return A[i * cols() + j];
 	else
 		throw std::out_of_range("\nError accessing an element beyond matrix bounds");
 }
@@ -218,13 +217,9 @@ MatrixX<typename scalarType> MatrixX<typename scalarType>::operator+(const Matri
 	if (this->rows() == m.rows() && this->cols() == m.cols())
 	{
 		MatrixX<scalarType> result{ m.rows(),m.cols() };
-		typename std::vector<scalarType>::const_iterator it1{ A.begin() };
-		typename std::vector<scalarType>::const_iterator it2{ m.A.begin() };
-		typename std::vector<scalarType>::iterator resultIter{ result.A.begin() };
-		while (it1 < A.end() && it2 < m.A.end())
+		for (int i{}; i < A.size(); ++i)
 		{
-			*resultIter = *it1 + *it2;
-			++it1; ++it2; ++resultIter;
+			result.A[i] = A[i] + m.A[i];
 		}
 		return result;
 	}
@@ -247,13 +242,9 @@ MatrixX<typename scalarType> MatrixX<typename scalarType>::operator-(const Matri
 	if (this->rows() == m.rows() && this->cols() == m.cols())
 	{
 		MatrixX<scalarType> result{ m.rows(),m.cols() };
-		typename std::vector<scalarType>::const_iterator it1{ A.begin() };
-		typename std::vector<scalarType>::const_iterator it2{ m.A.begin() };
-		typename std::vector<scalarType>::iterator resultIter{ result.A.begin() };
-		while (it1 < A.end() && it2 < m.A.end())
+		for (int i{}; i < A.size(); ++i)
 		{
-			*resultIter = *it1 - *it2;
-			++it1; ++it2; ++resultIter;
+			result.A[i] = A[i] - m.A[i];
 		}
 		return result;
 	}
@@ -399,12 +390,8 @@ MatrixX<scalarType> operator*(const scalarType k, MatrixX<scalarType>& m)
 {
 	MatrixX<scalarType> result{ m };
 	for (int i{}; i < m.rows(); ++i)
-	{
 		for (int j{}; j < m.cols(); ++j)
-		{
-			result(i, j) = m(i,j) * k;
-		}
-	}
+			result(i, j) *= k;
 
 	return result;
 }
@@ -500,26 +487,54 @@ MatrixX<scalarType>& operator*=(const scalarType k, MatrixX<scalarType>& A)
 	return A;
 }
 
+/// <summary>
+/// Get the ith row vector.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="i"></param>
+/// <returns></returns>
 template<class scalarType>
-MatrixX<scalarType> row(const MatrixX<scalarType>& m, int i)
+MatrixX<scalarType> MatrixX<scalarType>::row(int i) const
 {
-	MatrixX<scalarType> result{ 1, m.cols() };
+	MatrixX<scalarType> result{ 1, cols() };
 
-	for (int j{}; j < m.cols(); ++j)
-	{
-		result(0, j) = m(i, j);
-	}
+	for (int j{}; j < cols(); ++j)
+		result(0, j) = A[i * cols() + j];
+
 	return result;
 }
 
+/// <summary>
+/// Get the jth column vector.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="j"></param>
+/// <returns></returns>
 template<class scalarType>
-MatrixX<scalarType> col(const MatrixX<scalarType>& m, int j)
+MatrixX<scalarType> MatrixX<scalarType>::col(int j) const
 {
-	MatrixX<scalarType> result{ m.rows(), 1 };
+	MatrixX<scalarType> result{ rows(), 1 };
 
-	for (int i{}; i < m.rows(); ++i)
-	{
-		result(i, 0) = m(i, j);
-	}
+	for (int i{}; i < rows(); ++i)
+		result(i, 0) = A[i + j * cols()];
+
+	return result;
+}
+
+/// <summary>
+/// Transpose the matrix.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <returns></returns>
+template<class scalarType>
+MatrixX<scalarType> MatrixX<scalarType>::transpose() const
+{
+	MatrixX<scalarType> result{ cols(),rows() };
+	for (int i{}; i < rows(); ++i)
+		for (int j{}; j < cols(); ++j)
+			result(j, i) = (*this) (i, j);
+	
+	result._rows = cols();
+	result._cols = rows();
 	return result;
 }

@@ -7,6 +7,7 @@
 #include <iterator>
 #include <iomanip>
 #include <initializer_list>
+#include <algorithm>
 
 template <typename T, int r = 0, int c = 0>
 class Matrix;
@@ -84,21 +85,21 @@ public:
 
 };
 
-// Non-member operator functions
+// Global operators
 template<typename scalarType, int m, int n, int p, int q>
 Matrix<scalarType, m, q> operator*(const Matrix<scalarType, m, n>& A, const Matrix<scalarType, p, q>& B);
 
 
 template<typename scalarType, int m, int n>
-Matrix<scalarType, m, n>& operator*(const scalarType k, const Matrix<scalarType, m, n>& mat);
+Matrix<scalarType, m, n> operator*(const scalarType k, const Matrix<scalarType, m, n>& mat);
 
 // Non-member operator functions
 template<typename scalarType, int m, int n, int p, int q>
 Matrix<scalarType, m, q>& operator*=(Matrix<scalarType, m, n>& A, const Matrix<scalarType, p, q>& B);
 
 
-template<typename scalarType, int m, int n, typename T>
-Matrix<scalarType, m, n>& operator*=(const T k, Matrix<scalarType, m, n>& mat);
+template<typename scalarType, int m, int n>
+Matrix<scalarType, m, n>& operator*=(const scalarType k, Matrix<scalarType, m, n>& mat);
 
 /// <summary>
 /// The default constructor.
@@ -246,22 +247,14 @@ inline Matrix<typename scalarType, rowsAtCompileTime, colsAtCompileTime> Matrix<
 
 	if (this->rows() == m.rows() && this->cols() == m.cols())
 	{
-		typename std::array<scalarType, rowsAtCompileTime* colsAtCompileTime>::const_iterator it1{ A.begin() };
-		typename std::array<scalarType, rowsAtCompileTime* colsAtCompileTime>::const_iterator it2{ m.A.begin() };
-		typename std::array<scalarType, rowsAtCompileTime* colsAtCompileTime>::iterator resultIter{ result.A.begin() };
-		while (it1 < A.end() && it2 < m.A.end())
-		{
-			*resultIter = *it1 + *it2;
-			++it1; ++it2; ++resultIter;
-		}
+		for (int i{}; i < A.size(); ++i)
+			result.A[i] = A[i] + m.A[i];
+		return result;
 	}
 	else
 	{
 		throw std::logic_error("Matrices have different dimensions; therefore cannot be added!");
 	}
-
-
-	return result;
 }
 
 /// <summary>
@@ -278,22 +271,14 @@ inline Matrix<typename scalarType, rowsAtCompileTime, colsAtCompileTime> Matrix<
 
 	if (this->rows() == m.rows() && this->cols() == m.cols())
 	{
-		typename std::array<scalarType, rowsAtCompileTime* colsAtCompileTime>::const_iterator it1{ A.begin() };
-		typename std::array<scalarType, rowsAtCompileTime* colsAtCompileTime>::const_iterator it2{ m.A.begin() };
-		typename std::array<scalarType, rowsAtCompileTime* colsAtCompileTime>::iterator resultIter{ result.A.begin() };
-		while (it1 < A.end() && it2 < m.A.end())
-		{
-			*resultIter = *it1 - *it2;
-			++it1; ++it2; ++resultIter;
-		}
+		for (int i{}; i < A.size(); ++i)
+			result.A[i] = A[i] - m.A[i];
+		return result;
 	}
 	else
 	{
 		throw std::logic_error("Matrices have different dimensions; therefore cannot be added!");
 	}
-
-
-	return result;
 }
 
 /// <summary>
@@ -429,17 +414,14 @@ std::ostream& operator<<(std::ostream& os, Matrix<scalarType, rowsAtCompileTime,
 /// <param name="m"></param>
 /// <returns></returns>
 template<typename scalarType, int m, int n>
-Matrix<scalarType, m, n>& operator*(const scalarType k, Matrix<scalarType, m, n>& mat)
+Matrix<scalarType, m, n> operator*(const scalarType k, Matrix<scalarType, m, n>& mat)
 {
+	Matrix<scalarType, m, n> result{ mat };
 	for (int i{}; i < m.rows(); ++i)
-	{
 		for (int j{}; j < m.cols(); ++j)
-		{
-			mat(i, j) *= k;
-		}
-	}
+			result(i, j) *= k;
 
-	return mat;
+	return result;
 }
 
 /// <summary>
