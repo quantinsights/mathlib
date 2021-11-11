@@ -1,14 +1,114 @@
-/// \mainpage Introduction.
-/// Mathlib is a hobbyist C++ implementation of various numerical algorithms. The capabilities include:
-/// - Solution of equations by iteration.
-/// - Solution of systems of linear equations.
-/// - Special matrices.
-/// - Simultaneous non-linear equations.
-/// - Finding the eigenvalues and eigenvectors of a symmetric matrix.
-/// - Polynomial interpolation.
-/// - Numerical integration.
-/// - Polynomial integration in the \f$\infty\f$-norm.
-/// - Polynomial approximation in the \f$2\f$-norm. 
-/// - Piecewise polynomial approximation.
-/// - Initial value problems for ODEs.
-/// - Boundary value problems for ODEs.
+/// \mainpage Getting started
+/// MathLib is a simple C++ library for numerical solutions of problems. This is a 
+/// very short guide on how to get started with MathLib.
+/// 
+/// \section how_to_install_mathlib How to "install" MathLib?
+/// In order to use MathLib, you just need to download MathLib's source code. I have created
+/// MathLib as a header-only library, so the header files in /src subdirectory are the only files
+/// required to compile programs with MathLib.
+/// 
+/// \section a_simple_first_program A simple first program.
+/// 
+///
+/// This page aims to provide an overview and some details on how to perform 
+/// arithmetic between matrices, vectors and scalars with MathLib.
+///
+/// MathLib offers matrix/vector arithmetic operations through overloads of common
+/// C++ operators such as +, -, *, or through dot(), cross(), transpose(), row(), col() etc. For
+/// the Matrix class operators are only overloaded to support basic linear algebra
+/// operations. 
+///
+/// All matrices and vectors are objects of the Matrix template class. Vectors are just a special 
+/// case of matrices, with 1 row or 1 column.
+///
+/// The Matrix class takes three mandatory template parameters.
+///
+/// ``Matrix<typename scalarType, int rowsAtCompileTime, int colsAtCompileTime>``
+/// 
+/// - scalarType is the type of coefficients. That is, if you want a matrix of floats,
+/// choose float here.
+/// - rowsAtCompileTime and colsAtCompileTime are the number of rows and columns of the matrix
+/// as known at compile time.
+///
+/// Some convenience typedefs are defined to cover the usual cases. For example, ``Matrix4f`` is a 4x4
+/// matrix of floats. Here is how it is defined in MathLib:
+///
+/// `typedef Matrix<float, 4, 4> Matrix4f;`
+///
+/// MathLib is not limited to matrices whose dimensions are known at compile time. If the dimensions
+/// of the matrix are unknown at compile-time, the MatrixX template class can be used. In MathLib,
+/// I refer to such a size as dynamic size, while a size that is known at compile-time is called a 
+/// fixed-size matrix.
+///
+/// \section constructors Constructors.
+/// A default constructor is always available, never performs any dynamic memory allocation. You can do:
+///
+/// ```
+/// Matrix3f a;
+/// MatrixXf b;
+/// ```
+/// 
+/// Here,
+/// - a is 3-by-3 matrix, with a plain float[9] array of uninitialized coefficients.
+/// - b is a dynamic size matrix whose size is currently 0-by-0, and whose vector of coefficients haven't been allocated at all.
+///
+/// Constructors for a dynamic matrix taking a user-supplied size is also available.
+///
+/// ```
+/// MatrixXf a{10, 15};
+/// VectorXf b{30};
+/// ```
+///
+/// Matrices and vectors can be initialized from lists of coefficients. Coefficients have to be grouped by
+/// rows and passed as an initializer list of initializer lists.
+/// 
+/// ```
+/// MatrixXd a{
+///			{1, 0, 0},
+///			{0, 1, 0},
+///			{0, 0, 1}
+/// };
+/// ```
+///
+/// \section coefficient_accessors Coefficient Accessors.
+/// 
+/// The primary coefficient accessor and mutator in MathLib is the overloaded parentheses operator. The numbering starts at zero.
+/// 
+/// ```
+/// MatrixXd m {2,2};
+/// m(0,0) = 3;
+/// m(0,1) = 2.5;
+/// m(1,0) = -1;
+/// m(1,1) = m(1,0) + m(0,1);
+/// std::cout << "Here is the matrix m:\n" << m << std::endl;
+/// ```
+/// 
+/// \section comma_initialization Comma Initialization.
+/// Matrix and vector coefficients can be conveniently set using the comma-initializer syntax.
+/// 
+/// ```
+/// MatrixXd identity << 1, 0, 0,
+/// 					 0, 1, 0,
+/// 					 0, 0, 1;
+/// 					 
+/// ```
+/// 
+/// \section assignment Assignment.
+/// Assignment is the action of copying one matrix into the other, using the operator `=`.
+/// 
+/// \section addition_and_subtraction Addition and subtraction.
+/// The left and right hand side matrices must of course be of the same size. They must also have the same `scalarType`
+/// as MathLib does not support automatic type promotion for now. The operators here are:
+/// - binary operator + as in \f$A + B \f$.
+/// - binary operator - as in \f$A - B \f$.
+/// - binary operator * as in \f$A \cdot B \f$.
+/// - unary plus operator + as in \f$ +A \f$.
+/// - unary minus operator - as in \f$ -A \f$.
+/// - compound operator +=
+/// - compound operator -=
+/// 
+/// \section scalar_multiplication Scalar Multiplication.
+/// Multiplication and division by scalars is very simple too. The operators here are:
+/// - scalar multiplication operator * as in `k*A`.
+/// - compound operator *= as in `A*=k`.
+

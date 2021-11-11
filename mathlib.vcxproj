@@ -167,13 +167,7 @@
     <ClInclude Include="src\SchedulePeriod.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\BusinessDayConventions.cpp" />
     <ClCompile Include="src\dllmain.cpp" />
-    <ClCompile Include="src\Frequency.cpp" />
-    <ClCompile Include="src\HolidayCalendar.cpp" />
-    <ClCompile Include="src\MatrixX.cpp" />
-    <ClCompile Include="src\pch.cpp" />
-    <ClCompile Include="src\SchedulePeriod.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

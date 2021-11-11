@@ -15,6 +15,10 @@ using MatrixXi = MatrixX<int>;
 using MatrixXd = MatrixX<double>;
 using MatrixXf = MatrixX<float>;
 
+using VectorXf = MatrixXf;
+using VectorXd = MatrixXd;
+using VectorXi = MatrixXi;
+
 /// <summary>
 /// ``MatrixX`` is a templated class that implements dynamic matrices.
 /// </summary>
@@ -30,6 +34,7 @@ private:
 	typename std::vector<scalarType>::iterator currentPosition;
 public:
 	MatrixX();
+	MatrixX(int n);
 	MatrixX(int m, int n);
 	MatrixX(const MatrixX& m);
 	MatrixX(std::initializer_list<std::initializer_list<scalarType>>);
@@ -107,6 +112,19 @@ MatrixX<typename scalarType>::MatrixX(int m, int n) : _rows{ m }, _cols{ n }, _s
 {
 	currentPosition = A.begin();
 }
+
+/// <summary>
+/// Construct a column vector \f$v \in \mathbf{R}^{n}\f$.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="m"></param>
+/// <param name="n"></param>
+template<typename scalarType>
+MatrixX<typename scalarType>::MatrixX(int n) : MatrixX(n, 1)
+{
+	currentPosition = A.begin();
+}
+
 
 /// <summary>
 /// Allocates and initializes a matrix using the curly brace initializer list.
