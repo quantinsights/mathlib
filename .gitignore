@@ -12,3 +12,8 @@
 /Debug/mathlib.tlog
 /Debug
 /docs/latex
+/x64
+/api-doc
+.vs/mathlib/v16/ipch/
+.vs/mathlib/v16/ipch/AutoPCH/e297475899698eec/HOLIDAYCALENDAR.ipch
+tests/.vs/

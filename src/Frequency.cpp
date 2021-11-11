@@ -35,7 +35,7 @@ Frequency::Frequency(string f)
 		period = frequency::P1Y;
 }
 
-frequency Frequency::getPeriod()
+frequency Frequency::getPeriod() const
 {
 	return period;
 }

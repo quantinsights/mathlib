@@ -46,7 +46,7 @@ void HolidayCalendar::generateCalendar()
 {
 	if (holidayCalendarId == HolidayCalendarId::GBLO)
 	{
-		for (int year{ 1950 }; year <= 2099; ++year)
+		for (year_type year{ 1950 }; year <= 2099; year=year+1)
 		{
 			
 			// New Year
@@ -140,7 +140,7 @@ void HolidayCalendar::generateCalendar()
 /// <returns></returns>
 date HolidayCalendar::firstInMonth(int year, int month, gregorian_calendar::day_of_week_type dayOfWeek)
 {
-	date firstOfTheMonth{ year, month, 1 };
+	date firstOfTheMonth{ static_cast<year_type>(year),static_cast<month_type>(month), 1 };
 	date result{ firstOfTheMonth };
 	while (result.day_of_week() != dayOfWeek)
 		result += days(1);
@@ -150,8 +150,8 @@ date HolidayCalendar::firstInMonth(int year, int month, gregorian_calendar::day_
 
 date HolidayCalendar::lastInMonth(int year, int month, gregorian_calendar::day_of_week_type dayOfWeek)
 {
-	int eom_day{ gregorian_calendar::end_of_month_day(year, month) };
-	date endOfMonth{ year, month, eom_day };
+	day_type eom_day{ gregorian_calendar::end_of_month_day(year, month) };
+	date endOfMonth{ static_cast<year_type>(year),static_cast<month_type>(month), eom_day };
 	date result{ endOfMonth };
 	while (result.day_of_week() != dayOfWeek)
 		result -= days(1);
@@ -170,22 +170,27 @@ date HolidayCalendar::bumpToMon(date d)
 
 date HolidayCalendar::christmasBumpedSatSun(int year)
 {
-	date christmas{ year, 12, 25 };
+	date christmas{ static_cast<year_type>(year), 12, 25 };
 	if (christmas.day_of_week() == Saturday || christmas.day_of_week() == Sunday)
 	{
-		return date{ year, 12, 27 };
+		return date{ static_cast<year_type>(year), 12, 27 };
 	}
 	return christmas;
 }
 
 date HolidayCalendar::boxingDayBumpedSatSun(int year)
 {
-	date boxingDay{ year, 12, 26 };
+	date boxingDay{ static_cast<year_type>(year), 12, 26 };
 	if (boxingDay.day_of_week() == Saturday || boxingDay.day_of_week() == Sunday)
 	{
-		return date{ year, 12, 28 };
+		return date{ static_cast<year_type>(year), 12, 28 };
 	}
 	return boxingDay;
+}
+
+bool isSatSun(date d)
+{
+	return (d.day_of_week() == Saturday || d.day_of_week() == Sunday);
 }
 
 void HolidayCalendar::removeSatSun()
@@ -198,10 +203,7 @@ void HolidayCalendar::removeSatSun()
 	);
 }
 
-bool isSatSun(date d)
-{
-	return (d.day_of_week() == Saturday || d.day_of_week() == Sunday);
-}
+
 
 bool HolidayCalendar::isHoliday(date d)
 {
@@ -281,5 +283,5 @@ date HolidayCalendar::easter(int year)
 	int m{ (a + 11 * h + 22 * l) / 451 };
 	int month{ (h + l - 7 * m + 114) / 31 };
 	int day{ ((h + l - 7 * m + 114) % 31) + 1 };
-	return date{ year, month, day };
+	return date{ static_cast<year_type>(year), static_cast<month_type>(month), static_cast<day_type>(day) };
 }

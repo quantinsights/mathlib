@@ -1,0 +1,14 @@
+/// \mainpage Introduction.
+/// Mathlib is a hobbyist C++ implementation of various numerical algorithms. The capabilities include:
+/// - Solution of equations by iteration.
+/// - Solution of systems of linear equations.
+/// - Special matrices.
+/// - Simultaneous non-linear equations.
+/// - Finding the eigenvalues and eigenvectors of a symmetric matrix.
+/// - Polynomial interpolation.
+/// - Numerical integration.
+/// - Polynomial integration in the \f$\infty\f$-norm.
+/// - Polynomial approximation in the \f$2\f$-norm. 
+/// - Piecewise polynomial approximation.
+/// - Initial value problems for ODEs.
+/// - Boundary value problems for ODEs.

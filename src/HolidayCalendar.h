@@ -11,6 +11,10 @@
 using namespace std;
 using namespace boost::gregorian;
 
+typedef boost::gregorian::date::year_type year_type;
+typedef boost::gregorian::date::month_type month_type;
+typedef boost::gregorian::date::day_type day_type;
+
 enum class HolidayCalendarId
 {
 	GBLO, // London(UK) Holidays

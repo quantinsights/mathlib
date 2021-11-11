@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "BusinessDayConventions.h"
 
 BusinessDayConventions::BusinessDayConventions(string c)

@@ -15,51 +15,54 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
+    <ClInclude Include="src\BusinessDayAdjustment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="pch.h">
+    <ClInclude Include="src\BusinessDayConventions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Schedule.h">
+    <ClInclude Include="src\framework.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SchedulePeriod.h">
+    <ClInclude Include="src\Frequency.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Frequency.h">
+    <ClInclude Include="src\pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BusinessDayConventions.h">
+    <ClInclude Include="src\Schedule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HolidayCalendar.h">
+    <ClInclude Include="src\SchedulePeriod.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DayCounts.h">
+    <ClInclude Include="src\HolidayCalendar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BusinessDayAdjustment.h">
+    <ClInclude Include="src\Matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MatrixX.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
+    <ClCompile Include="src\dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="src\Frequency.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SchedulePeriod.cpp">
+    <ClCompile Include="src\HolidayCalendar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HolidayCalendar.cpp">
+    <ClCompile Include="src\pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Frequency.cpp">
+    <ClCompile Include="src\SchedulePeriod.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BusinessDayConventions.cpp">
+    <ClCompile Include="src\BusinessDayConventions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
