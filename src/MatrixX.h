@@ -189,6 +189,46 @@ MatrixColSlice<scalarType> MatrixColSlice<scalarType>::operator=(const MatrixX<s
 	return *this;
 }
 
+/// <summary>
+/// Scalar multiplication of a constant with a row vector
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="k"></param>
+/// <param name="colVector"></param>
+/// <returns></returns>
+template<class scalarType>
+MatrixX<scalarType> operator*(const scalarType k, const MatrixRowSlice<scalarType>& rowVec)
+{
+	slice s = rowVec.getMatrixSlice();
+	MatrixX<scalarType>& m = rowVec.getMatrixRef();
+	int row = rowVec.getRow();
+	MatrixX<scalarType> result{1, s.getLength()};
+
+	for (int j{}; j < s.getLength(); ++j)
+		result(0, j) = k * m(row, j);
+	return result;
+}
+
+/// <summary>
+/// Scalar multiplication of a constant with a column vector
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="k"></param>
+/// <param name="colVector"></param>
+/// <returns></returns>
+template<class scalarType>
+MatrixX<scalarType> operator*(const scalarType k, const MatrixColSlice<scalarType>& colVec)
+{
+	slice s = colVec.getMatrixSlice();
+	MatrixX<scalarType>& m = colVec.getMatrixRef();
+	int col = colVec.getCol();
+	MatrixX<scalarType> result{ s.getLength(),1 };
+
+	for (int i{}; i < s.getLength(); ++i)
+		result(i, 0) = k * m(i, col);
+	return result;
+}
+
 
 /// <summary>
 /// ``MatrixX`` is a templated class that implements dynamic matrices.
