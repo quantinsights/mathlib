@@ -134,7 +134,7 @@
 /// - scalar multiplication operator * as in `k*A`.
 /// - compound operator *= as in `A*=k`.
 /// 
-/// \section row_and_col_vectors and column operations.
+/// \section row_col_operations Row and Column operations.
 /// I have implemented `row()`, `col()` and `block()` operations to support manipulation of rows, columns
 /// and sub-matrices of a matrix. For example,
 /// 
