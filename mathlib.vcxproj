@@ -165,6 +165,7 @@
     <ClInclude Include="src\pch.h" />
     <ClInclude Include="src\Schedule.h" />
     <ClInclude Include="src\SchedulePeriod.h" />
+    <ClInclude Include="src\slice.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp" />

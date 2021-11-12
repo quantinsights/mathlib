@@ -45,6 +45,9 @@
     <ClInclude Include="src\MatrixX.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\slice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp">

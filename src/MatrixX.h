@@ -7,6 +7,8 @@
 #include <iomanip>
 #include <initializer_list>
 #include <algorithm>
+#include "slice.h"
+#include <cassert>
 
 template <typename T>
 class MatrixX;
@@ -18,6 +20,175 @@ using MatrixXf = MatrixX<float>;
 using VectorXf = MatrixXf;
 using VectorXd = MatrixXd;
 using VectorXi = MatrixXi;
+
+/// <summary>
+/// MatrixRowSlice is a proxy object that represents a row of a matrix without being the row itself. 
+/// It holds a reference to a MatrixX object, a slice and a row/col index. We are then free to implement
+/// how this proxy behaves, by having its operations inspect and manipulate the matrix it was created from.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+template <class scalarType>
+class MatrixRowSlice 
+{
+private:
+	MatrixX<scalarType>& _matrix_ref;
+	slice _matrix_slice;
+	int _row;
+public:
+	MatrixRowSlice() = default;
+	MatrixRowSlice(MatrixX<scalarType>& m_ref, slice s, int r) : _matrix_ref{ m_ref }, _matrix_slice{ s }, _row{ r } {}
+	
+	//Overload operators
+	MatrixRowSlice operator=(const MatrixRowSlice matrixSlice) const;
+	MatrixRowSlice<scalarType> operator=(const MatrixX<scalarType>& rowVector);
+
+	slice getMatrixSlice() const;
+	int getRow() const;
+	MatrixX<scalarType>& getMatrixRef() const;
+};
+
+/// <summary>
+/// MatrixColSlice is a proxy object that represents a column of a matrix.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+template <class scalarType>
+class MatrixColSlice 
+{
+private:
+	MatrixX<scalarType>& _matrix_ref;
+	slice _matrix_slice;
+	int _col;
+public:
+	MatrixColSlice() = default;
+	MatrixColSlice(MatrixX<scalarType>& m_ref, slice s, int c) : _matrix_ref{ m_ref }, _matrix_slice{ s }, _col{ c } {}
+
+	//Overload operators
+	MatrixColSlice operator=(const MatrixColSlice matrixSlice) const;
+	MatrixColSlice<scalarType> operator=(const MatrixX<scalarType>& colVector);
+
+	slice getMatrixSlice() const;
+	int getCol() const;
+	MatrixX<scalarType>& getMatrixRef() const;
+};
+
+/// <summary>
+/// Return a ref to the matrix object from which this row vector was created.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <returns></returns>
+template<class scalarType>
+MatrixX<scalarType>& MatrixRowSlice<scalarType>::getMatrixRef() const
+{
+	return _matrix_ref;
+}
+
+/// <summary>
+/// Return a ref to the matrix object from which this col vector was created.
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <returns></returns>
+template<class scalarType>
+MatrixX<scalarType>& MatrixColSlice<scalarType>::getMatrixRef() const
+{
+	return _matrix_ref;
+}
+
+
+template<class scalarType>
+slice MatrixRowSlice<scalarType>::getMatrixSlice() const
+{
+	return _matrix_slice;
+}
+
+template<class scalarType>
+slice MatrixColSlice<scalarType>::getMatrixSlice() const
+{
+	return _matrix_slice;
+}
+
+template<class scalarType>
+int MatrixRowSlice<scalarType>::getRow() const
+{
+	return _row;
+}
+
+template<class scalarType>
+int MatrixColSlice<scalarType>::getCol() const
+{
+	return _col;
+}
+
+/// <summary>
+/// Overloaded assignment operator. This allows you to do `m.row(1) = m.row(2);`
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="s"></param>
+/// <returns></returns>
+template <class scalarType>
+MatrixRowSlice<scalarType> MatrixRowSlice<scalarType>::operator=(const MatrixRowSlice s) const
+{
+	assert(_matrix_slice.length == s.getMatrixSlice().getLength());
+	MatrixX<scalarType>& otherMatrix = s.getMatrixRef();
+	slice otherSlice{ s.getMatrixSlice() };
+
+	for (int j{}; i < _matrix_slice.length; ++j)
+		_matrix_ref(_row, _matrix_slice(j)) = otherMatrix(s.getRow(),s.getMatrixSlice(j));
+	return *this;
+}
+
+/// <summary>
+/// Overloaded assignment operator. This allows you to do `m.row(1) = VectorXd {{1,2,3}};`
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="s"></param>
+/// <returns></returns>
+template<class scalarType>
+MatrixRowSlice<scalarType> MatrixRowSlice<scalarType>::operator=(const MatrixX<scalarType>& rowVector)
+{
+	assert(rowVector.rows() == 1);
+	assert(rowVector.cols() == _matrix_slice.getLength());
+	for (int j{}; j < rowVector.cols(); ++j)
+		_matrix_ref(_row, _matrix_slice(j)) = rowVector(0, j);
+	
+	return *this;
+}
+
+/// <summary>
+/// Overloaded assignment operator. This allows you to do `m.col(1) = m.col(2);`
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="s"></param>
+/// <returns></returns>
+template <class scalarType>
+MatrixColSlice<scalarType> MatrixColSlice<scalarType>::operator=(const MatrixColSlice s) const
+{
+	assert(_matrix_slice.length == s.getMatrixSlice().getLength());
+	MatrixX<scalarType>& rhs = s.getMatrixRef();
+	slice rhsSlice{ s.getMatrixSlice() };
+
+	for (int i{}; i < _matrix_slice.length; ++i)
+		_matrix_ref(rhsSlice(i), _col) = rhs(s.getMatrixSlice(i),s.getCol() );
+	return *this;
+}
+
+/// <summary>
+/// Overloaded assignment operator. This allows you to assign a user-supplied column vector
+/// to a given column of the matrix m, something like `m.col(1) = VectorXd {{1},{2},{3}};`
+/// </summary>
+/// <typeparam name="scalarType"></typeparam>
+/// <param name="s"></param>
+/// <returns></returns>
+template<class scalarType>
+MatrixColSlice<scalarType> MatrixColSlice<scalarType>::operator=(const MatrixX<scalarType>& colVector)
+{
+	assert(colVector.cols() == 1);
+	assert(colVector.rows() == _matrix_slice.length);
+	for (int i{}; i < colVector.rows(); ++i)
+		_matrix_ref(_matrix_slice(i),_col ) = colVector(i, 0);
+
+	return *this;
+}
+
 
 /// <summary>
 /// ``MatrixX`` is a templated class that implements dynamic matrices.
@@ -52,13 +223,15 @@ public:
 	MatrixX& operator<<(const scalarType x);
 	MatrixX& operator,(const scalarType x);
 	MatrixX& operator=(const MatrixX& right_hand_side);
+	MatrixX& operator=(const MatrixRowSlice<scalarType>& rhs);
+	MatrixX& operator=(const MatrixColSlice<scalarType>& rhs);
 	bool operator==(const MatrixX& right_hand_side);
 	MatrixX& operator+=(const MatrixX& m);
 	MatrixX& operator-=(const MatrixX& m);
 
 	//Submatrices and sub-vectors
-	MatrixX<scalarType> row(int i) const;
-	MatrixX<scalarType> col(int j) const;
+	MatrixRowSlice<scalarType> MatrixX<scalarType>::row(int i);
+	MatrixColSlice<scalarType> MatrixX<scalarType>::col(int j);
 
 	MatrixX<scalarType> transpose() const;
 };
@@ -321,18 +494,52 @@ MatrixX<typename scalarType>& MatrixX<typename scalarType>::operator,(const scal
 /// <param name="right_hand_side"></param>
 /// <returns></returns>
 template<typename scalarType>
-MatrixX<typename scalarType>& MatrixX<typename scalarType>::operator=(const MatrixX& right_hand_side)
+MatrixX<typename scalarType>& MatrixX<typename scalarType>::operator=(const MatrixX& rhs)
 {
-	if (this->rows() != right_hand_side.rows() || this->cols() != right_hand_side.cols())
+	if (this->rows() != rhs.rows() || this->cols() != rhs.cols())
 		throw std::logic_error("Assignment failed, matrices have different dimensions");
 
-	if (this == &right_hand_side)
+	if (this == &rhs)
 		return *this;
 
-	this->A = right_hand_side.A;
-	this->_rows = right_hand_side._rows;
-	this->_cols = right_hand_side._cols;
-	this->currentPosition = right_hand_side.currentPosition;
+	this->A = rhs.A;
+	this->_rows = rhs._rows;
+	this->_cols = rhs._cols;
+	this->currentPosition = rhs.currentPosition;
+	return *this;
+}
+
+template<typename scalarType>
+MatrixX<scalarType>& MatrixX<scalarType>::operator=(const MatrixRowSlice<scalarType>& rhs)
+{
+	slice s{ rhs.getMatrixSlice() };
+	MatrixX<scalarType>& mat = rhs.getMatrixRef();
+	this->_rows = 1;
+	this->_cols = s.getLength();
+	this->_size = this->_cols;
+	this->A = std::vector<scalarType>(_cols);
+	for (int j{}; j < s.getLength(); ++j)
+	{
+		A[j] = mat(rhs.getRow(), s(j));
+	}
+	this->currentPosition = mat.currentPosition;
+	return *this;
+}
+
+template<typename scalarType>
+MatrixX<scalarType>& MatrixX<scalarType>::operator=(const MatrixColSlice<scalarType>& rhs)
+{
+	slice s{ rhs.getMatrixSlice() };
+	MatrixX<scalarType>& mat = rhs.getMatrixRef();
+	this->_rows =  s.getLength();
+	this->_size = this->rows();
+	this->_cols = 1;
+	this->A = std::vector<scalarType>(_rows);
+	for (int i{}; i < s.getLength(); ++i)
+	{
+		A[i] = mat(s(i), rhs.getCol());
+	}
+	this->currentPosition = mat.currentPosition;
 	return *this;
 }
 
@@ -512,14 +719,10 @@ MatrixX<scalarType>& operator*=(const scalarType k, MatrixX<scalarType>& A)
 /// <param name="i"></param>
 /// <returns></returns>
 template<class scalarType>
-MatrixX<scalarType> MatrixX<scalarType>::row(int i) const
+MatrixRowSlice<scalarType> MatrixX<scalarType>::row(int i)
 {
-	MatrixX<scalarType> result{ 1, cols() };
-
-	for (int j{}; j < cols(); ++j)
-		result(0, j) = A[i * cols() + j];
-
-	return result;
+	slice s{ 0,cols(),1 };
+	return MatrixRowSlice<scalarType>{*this,s,i};
 }
 
 /// <summary>
@@ -529,14 +732,10 @@ MatrixX<scalarType> MatrixX<scalarType>::row(int i) const
 /// <param name="j"></param>
 /// <returns></returns>
 template<class scalarType>
-MatrixX<scalarType> MatrixX<scalarType>::col(int j) const
+MatrixColSlice<scalarType> MatrixX<scalarType>::col(int j)
 {
-	MatrixX<scalarType> result{ rows(), 1 };
-
-	for (int i{}; i < rows(); ++i)
-		result(i, 0) = A[i + j * cols()];
-
-	return result;
+	slice s{ 0,rows(),1 };
+	return MatrixRowSlice<scalarType>{*this, s, j};
 }
 
 /// <summary>

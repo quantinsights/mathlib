@@ -257,7 +257,8 @@ namespace tests
 				{0, 0, 1}
 			};
 
-			MatrixXd actual = m1.row(1);
+			MatrixXd actual;
+			actual = m1.row(1);
 			MatrixXd expected{
 				{0, 1, 0}
 			};
@@ -272,11 +273,30 @@ namespace tests
 				{0, 0, 1}
 			};
 
-			MatrixXd actual = m1.col(1);
+			MatrixXd actual;
+			actual = m1.row(1);
 			MatrixXd expected{
 				{0},
 				{1},
 				{0}
+			};
+			Assert::IsTrue(actual == expected);
+		}
+
+		TEST_METHOD(UnitTest11b_assignment)
+		{
+			MatrixXd actual{
+				{1, 0, 0},
+				{0, 1, 0},
+				{0, 0, 1}
+			};
+
+			actual.row(1) = { {1,2,3} };
+			
+			MatrixXd expected{
+				{1, 0, 0},
+				{1, 2, 3},
+				{0, 0, 1}
 			};
 			Assert::IsTrue(actual == expected);
 		}
