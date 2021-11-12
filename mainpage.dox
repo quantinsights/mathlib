@@ -133,4 +133,19 @@
 /// Multiplication and division by scalars is very simple too. The operators here are:
 /// - scalar multiplication operator * as in `k*A`.
 /// - compound operator *= as in `A*=k`.
-
+/// 
+/// \ section row_and_col_vectors and column operations.
+/// I have implemented `row()`, `col()` and `block()` operations to support manipulation of rows, columns
+/// and sub-matrices of a matrix. For example,
+/// 
+/// ```
+/// MatrixXd m{
+/// 	{1, 0, 0},
+/// 	{0, 1, 0},
+/// 	{0, 0, 1}
+/// };
+/// 
+/// m.row(1) = { {1,2,3} };
+/// ```
+/// 
+/// This assigns the row vector \f$(1,2,3)\f$ to the row index 1 (second row) of the matrix. 
